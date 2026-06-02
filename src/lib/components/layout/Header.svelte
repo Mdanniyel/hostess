@@ -27,14 +27,11 @@
 			<span class="navbar-toggler-icon"></span>
 		</button>
 		<div class="navbar-nav ml-auto">
-			<!-- svelte-ignore a11y_click_events_have_key_events -->
-			<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 			<img 
 				class="rounded-circle bg-white navbar-image" 
 				src="https://iplan-uuc-production.s3.amazonaws.com/public/corp/companies/4/logo_thumb.jpg?1450771519" 
 				alt="iPlan Logo"
-				use:longpress
-				onlongpress={() => settingsService.open()}
+				use:longpress={() => settingsService.open()}
 				style="cursor: pointer;"
 			/>
 		</div>

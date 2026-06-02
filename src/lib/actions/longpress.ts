@@ -1,19 +1,20 @@
 /**
  * Svelte Action: longpress
- * Triggers a custom 'longpress' event when mouse/touch is held down for specified duration.
+ * Triggers the provided callback function when the element is held down for 800ms.
+ * Automatically disables native text selection and mobile long-press context menus.
  *
  * Usage:
- *   <div use:longpress={800} onlongpress={handleLongpress}>...</div>
+ *   <div use:longpress={() => settingsService.open()}>...</div>
  */
-export function longpress(node: HTMLElement, duration = 800) {
+export function longpress(node: HTMLElement, callback: () => void) {
   let timer: ReturnType<typeof setTimeout> | undefined;
+  const duration = 800; // ms
 
   const handleStart = (e: MouseEvent | TouchEvent) => {
-    // If it's a right click, ignore it
     if (e instanceof MouseEvent && e.button !== 0) return;
 
     timer = setTimeout(() => {
-      node.dispatchEvent(new CustomEvent('longpress'));
+      callback();
     }, duration);
   };
 
@@ -31,6 +32,11 @@ export function longpress(node: HTMLElement, duration = 800) {
   node.addEventListener('touchstart', handleStart, { passive: true });
   node.addEventListener('touchend', handleCancel);
   node.addEventListener('touchcancel', handleCancel);
+
+  // Disable native iOS long-press image share menu & text selection
+  node.style.setProperty('-webkit-touch-callout', 'none');
+  node.style.setProperty('-webkit-user-select', 'none');
+  node.style.setProperty('user-select', 'none');
 
   return {
     destroy() {

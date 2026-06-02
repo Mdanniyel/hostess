@@ -55,12 +55,9 @@
 				<!-- Right Side: Branding/Lock -->
 				<div class="col-24 col-md-9" id="side">
 					<div id="side-content">
-						<!-- svelte-ignore a11y_click_events_have_key_events -->
-						<!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
 						<div 
 							class="icon rounded-circle d-inline-block"
-							use:longpress
-							onlongpress={() => settingsService.open()}
+							use:longpress={() => settingsService.open()}
 							style="cursor: pointer;"
 						>
 							<svg id="Icons" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 42.44 46.85">
