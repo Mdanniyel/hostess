@@ -1,0 +1,16 @@
+{
+  "name": "iPlan Hostess PWA",
+  "short_name": "Hostess",
+  "description": "Hostess seating management app",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2e4a7d",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

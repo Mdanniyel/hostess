@@ -1,0 +1,120 @@
+### Variables
+@host = https://lvh.me:3000
+@token = {{login.response.body.session.access_token}}
+
+### ─────────────────────────────────────────────────────────────────────────────
+### Login
+### ─────────────────────────────────────────────────────────────────────────────
+
+# @name login
+POST {{host}}/api/apps/checkin/v1/sessions
+Content-Type: application/json
+
+{
+  "email": "h1@demo.com",
+  "password": "123456"
+}
+
+### ─────────────────────────────────────────────────────────────────────────────
+### Sync — Initial full load (first time entering event)
+### ─────────────────────────────────────────────────────────────────────────────
+
+POST {{host}}/api/apps/checkin/v1/sync?auth_token={{token}}
+Content-Type: application/json
+
+{
+  "meta": {
+    "tablet_uid": "dev_macbook_01",
+    "app_version": "2.0.0"
+  },
+  "pull": {
+    "today_events": false,
+    "event_delta": {
+      "event_id": 251580,
+      "last_synced_at": null
+    }
+  },
+  "mutations": []
+}
+
+### ─────────────────────────────────────────────────────────────────────────────
+### Sync — Heartbeat (no mutations, pull delta only)
+### ─────────────────────────────────────────────────────────────────────────────
+
+POST {{host}}/api/apps/checkin/v1/sync?auth_token={{token}}
+Content-Type: application/json
+
+{
+  "meta": {
+    "tablet_uid": "dev_macbook_01",
+    "app_version": "2.0.0"
+  },
+  "pull": {
+    "today_events": false,
+    "event_delta": {
+      "event_id": 251580,
+      "last_synced_at": 1716472400.125
+    }
+  },
+  "mutations": []
+}
+
+### ─────────────────────────────────────────────────────────────────────────────
+### Sync — Push arrival + pull delta
+### ─────────────────────────────────────────────────────────────────────────────
+
+POST {{host}}/api/apps/checkin/v1/sync?auth_token={{token}}
+Content-Type: application/json
+
+{
+  "meta": {
+    "tablet_uid": "dev_macbook_01",
+    "app_version": "2.0.0"
+  },
+  "pull": {
+    "today_events": false,
+    "event_delta": {
+      "event_id": 251580,
+      "last_synced_at": 1716472400.125
+    }
+  },
+  "mutations": [
+    {
+      "action_id": 1,
+      "event_id": 251580,
+      "action_type": "create_arrival",
+      "payload": {
+        "uid": "chk_test_001",
+        "invitation_id": 63052323,
+        "table_num": 5,
+        "guests_count": 3,
+        "timestamp": 1716472505000
+      }
+    }
+  ]
+}
+
+### ─────────────────────────────────────────────────────────────────────────────
+### Sync — Lobby refresh (no active event, just refresh event list)
+### ─────────────────────────────────────────────────────────────────────────────
+
+POST {{host}}/api/apps/checkin/v1/sync?auth_token={{token}}
+Content-Type: application/json
+
+{
+  "meta": {
+    "tablet_uid": "dev_macbook_01",
+    "app_version": "2.0.0"
+  },
+  "pull": {
+    "today_events": true,
+    "event_delta": null
+  },
+  "mutations": []
+}
+
+### ─────────────────────────────────────────────────────────────────────────────
+### Logout
+### ─────────────────────────────────────────────────────────────────────────────
+
+DELETE {{host}}/api/apps/checkin/v1/sessions?auth_token={{token}}
