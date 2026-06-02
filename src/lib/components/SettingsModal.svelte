@@ -33,6 +33,29 @@
 	function handleCancel() {
 		settingsService.close();
 	}
+
+	function handleForceRefresh() {
+		window.location.reload();
+	}
+
+	import { db } from '$lib/db';
+	async function handleHardReset() {
+		if (!confirm('האם אתם בטוחים שברצונכם לבצע איפוס נתונים מלא? כל המידע המקומי יימחק והאפליקציה תופעל מחדש.')) return;
+		try {
+			localStorage.clear();
+			await db.delete();
+			if ('serviceWorker' in navigator) {
+				const registrations = await navigator.serviceWorker.getRegistrations();
+				for (const reg of registrations) {
+					await reg.unregister();
+				}
+			}
+			alert('האיפוס בוצע בהצלחה. האפליקציה תופעל מחדש.');
+			window.location.reload();
+		} catch (err: any) {
+			alert('שגיאה במהלך האיפוס: ' + err.message);
+		}
+	}
 </script>
 
 <!-- svelte-ignore a11y_click_events_have_key_events -->
@@ -83,6 +106,18 @@
 					/>
 				</div>
 			{/if}
+
+			<div class="recovery-section">
+				<h6 class="section-title">פעולות שיקום ואל-כשל</h6>
+				<div class="recovery-actions">
+					<button type="button" class="btn-recovery btn-refresh" onclick={handleForceRefresh}>
+						רענון קשיח
+					</button>
+					<button type="button" class="btn-recovery btn-reset" onclick={handleHardReset}>
+						איפוס נתונים מלא (Hard Reset)
+					</button>
+				</div>
+			</div>
 		</div>
 		<div class="modal-footer">
 			<button class="btn btn-save" onclick={handleSave}>שמור והפעל מחדש</button>
@@ -247,5 +282,62 @@
 	}
 	.animate-fade-in {
 		animation: fadeIn 0.2s ease forwards;
+	}
+
+	.recovery-section {
+		margin-top: 24px;
+		padding-top: 18px;
+		border-top: 1px dashed #e2e8f0;
+	}
+
+	.section-title {
+		font-size: 0.8rem;
+		font-weight: 700;
+		color: #64748b;
+		margin: 0 0 12px 0;
+		text-transform: uppercase;
+		letter-spacing: 0.5px;
+	}
+
+	.recovery-actions {
+		display: flex;
+		gap: 12px;
+	}
+
+	.btn-recovery {
+		flex: 1;
+		padding: 10px 12px;
+		font-size: 0.8rem;
+		font-weight: 600;
+		border-radius: 8px;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 6px;
+		border: 1px solid;
+		transition: all 0.2s;
+	}
+
+	.btn-refresh {
+		background: #ffffff;
+		border-color: #cbd5e1;
+		color: #475569;
+	}
+	.btn-refresh:hover {
+		background: #f8fafc;
+		border-color: #94a3b8;
+		color: #0f172a;
+	}
+
+	.btn-reset {
+		background: #fff5f5;
+		border-color: #fee2e2;
+		color: #dc2626;
+	}
+	.btn-reset:hover {
+		background: #fef2f2;
+		border-color: #fca5a5;
+		color: #b91c1c;
 	}
 </style>

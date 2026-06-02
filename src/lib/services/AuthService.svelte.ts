@@ -15,6 +15,7 @@ const api = new SyncApi(getApiUrl());
 
 class AuthService {
   currentSession = $state<SessionRecord | null>(null);
+  isInitialized = $state(false);
   isAuthenticated = $derived(this.currentSession !== null);
 
   constructor() {
@@ -40,6 +41,8 @@ class AuthService {
       }
     } catch (err) {
       console.error('AuthService: Failed to load session:', err);
+    } finally {
+      this.isInitialized = true;
     }
   }
 
