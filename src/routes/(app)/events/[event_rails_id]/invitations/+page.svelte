@@ -10,7 +10,15 @@
 <div class="container">
 	<div class="card">
 		<div class="card-header d-flex justify-content-between align-items-center">
-			<h5 class="card-title mb-0">הזמנות</h5>
+			<div class="d-flex align-items-center">
+				<h5 class="card-title mb-0">הזמנות</h5>
+				<a
+					href="{base}/events/{eventId}/invitations/new"
+					class="btn btn-outline-primary btn-sm mr-3"
+				>
+					<i class="far fa-plus mr-1"></i>הזמנה חדשה
+				</a>
+			</div>
 			<div class="small text-muted">
 				הגיעו <strong class="text-dark">{eventState.totalArrived}</strong> / {eventState.totalExpected}
 			</div>

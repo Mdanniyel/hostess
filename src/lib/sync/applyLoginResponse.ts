@@ -10,8 +10,13 @@
 
 import { db } from '../db';
 import type { LoginResponse } from '../api/SyncApi';
+import { resolveSketchBlobs } from './sketchDownloader';
 
 export async function applyLoginResponse(response: LoginResponse): Promise<void> {
+  if (response.today_events) {
+    await resolveSketchBlobs(response.today_events, response.session.access_token, id => db.events.get(id));
+  }
+
   await db.transaction('rw', [db.sessions, db.events], async () => {
     // Store session
     await db.sessions.put({

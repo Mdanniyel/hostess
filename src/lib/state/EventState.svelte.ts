@@ -213,6 +213,87 @@ class EventState {
     await this.writeCheckIn(invitationId, guestsCount, tableNum);
   }
 
+  /**
+   * Record a new Walk-in invitation locally and queue sync mutations.
+   */
+  async recordWalkIn(
+    title: string,
+    phone: string | null,
+    side: number,
+    tables: Array<{ tableNum: number; arrivedCount: number }>
+  ): Promise<string> {
+    if (!this.activeEventId) throw new Error('No active event');
+
+    const uuid = `inv_${crypto.randomUUID()}`;
+    const now = Date.now();
+
+    await db.transaction('rw', [db.invitations, db.actual_arrivals, db.outbound_sync_queue], async () => {
+      const totalArrived = tables.reduce((sum, t) => sum + t.arrivedCount, 0);
+
+      // 1. Create the invitation record locally
+      await db.invitations.put({
+        id: uuid,
+        event_id: this.activeEventId!,
+        title: title.trim(),
+        phone: phone?.trim() || null,
+        expected_guests_count: 0,
+        arrived_guests_count_by_hostess: totalArrived,
+        side: side,
+        group_id: null,
+        updated_at: now
+      });
+
+      // 2. Queue create_invitation in outbound queue
+      await db.outbound_sync_queue.add({
+        event_id: this.activeEventId!,
+        action_type: 'create_invitation',
+        payload: {
+          id: uuid,
+          title: title.trim(),
+          phone: phone?.trim() || null,
+          expected_guests_count: 0,
+          side: side,
+          group_id: null,
+          timestamp: now
+        },
+        created_at: now
+      });
+
+      // 3. Queue create_arrival in outbound queue for each table
+      for (const item of tables) {
+        if (item.arrivedCount <= 0) continue;
+        const arrivalUid = `chk_${crypto.randomUUID()}`;
+
+        await db.actual_arrivals.put({
+          uid: arrivalUid,
+          id: null,
+          event_id: this.activeEventId!,
+          invitation_id: uuid,
+          table_num: item.tableNum,
+          guests_count: item.arrivedCount,
+          tablet_uid: 'pwa_dev',
+          created_at: now,
+          updated_at: now
+        });
+
+        await db.outbound_sync_queue.add({
+          event_id: this.activeEventId!,
+          action_type: 'create_arrival',
+          payload: {
+            uid: arrivalUid,
+            invitation_id: uuid,
+            table_num: item.tableNum,
+            guests_count: item.arrivedCount,
+            timestamp: now
+          },
+          created_at: now
+        });
+      }
+    });
+
+    return uuid;
+  }
+
   // --- Private ---
 
   private computeFilteredInvitations(): Invitation[] {

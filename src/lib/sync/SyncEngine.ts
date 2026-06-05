@@ -12,6 +12,7 @@ import { liveQuery } from 'dexie';
 import type { HostessDatabase } from '../db';
 import type { SyncApi, SyncRequestPayload, SyncResponse } from '../api/SyncApi';
 import { applySyncResponse } from './applySyncResponse';
+import { resolveSketchBlobs } from './sketchDownloader';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Config
@@ -152,6 +153,11 @@ export class SyncEngine {
       });
 
       clearTimeout(timeoutId);
+
+      // Resolve/download sketch blobs if today_events were returned
+      if (response.today_events) {
+        await resolveSketchBlobs(response.today_events, session.access_token, id => this.db.events.get(id));
+      }
 
       // 7. Apply response to IndexedDB
       await applySyncResponse(response);

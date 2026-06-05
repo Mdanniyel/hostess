@@ -44,6 +44,14 @@
 				<i class="fal fa-fw mx-auto mb-1 d-block icon-iplan-table-with-chairs"></i>
 				שולחנות
 			</a>
+			<a 
+				class="w-100 text-center" 
+				class:active={$page.url.pathname.includes('/sketch')}
+				href="{base}/events/{eventRailsId}/sketch"
+			>
+				<i class="fal fa-fw mx-auto mb-1 d-block fa-map"></i>
+				סקיצה
+			</a>
 		</div>
 	</div>
 </nav>

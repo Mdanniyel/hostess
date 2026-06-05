@@ -4,6 +4,7 @@
 	import { base } from '$app/paths';
 	import { eventState } from '$lib/state/EventState.svelte';
 	import type { Invitation } from '$lib/models/Invitation';
+	import TableSelector from '$lib/components/TableSelector.svelte';
 
 	let eventId = $derived($page.params.event_rails_id);
 	let invitationId = $derived($page.params.invitation_id);
@@ -20,6 +21,29 @@
 			console.log('All tableSeatings in state:', JSON.stringify(eventState.tableSeatings.filter(s => s.invitation_id === invitation.id)));
 			console.log('All tables in state (ids):', eventState.tables.map(t => t.id));
 		}
+	});
+
+	let additionalTableNums = $state<number[]>([]);
+
+	// Combine tableEntries from invitation with local additional tables
+	let allEntries = $derived.by(() => {
+		if (!invitation) return [];
+		const entries = [...invitation.tableEntries];
+		const coveredNums = new Set(entries.map(e => e.tableNum));
+
+		for (const num of additionalTableNums) {
+			if (!coveredNums.has(num)) {
+				const table = eventState.tables.find(t => t.num === num);
+				entries.push({
+					tableId: table?.id ?? 0,
+					tableNum: num,
+					expectedAtTable: 0,
+					arrivedAtTable: 0
+				});
+				coveredNums.add(num);
+			}
+		}
+		return entries.sort((a, b) => a.tableNum - b.tableNum);
 	});
 
 	function increment(tableNum: number) {
@@ -70,14 +94,18 @@
 
 			<!-- Table entries with steppers -->
 			<ul class="list-group list-group-flush">
-				{#each invitation.tableEntries as entry, index (index)}
+				{#each allEntries as entry, index (index)}
 					{@const total = displayedCount(entry)}
 					<li class="list-group-item d-flex align-items-center justify-content-between">
 						<div>
 							<h5 class="mb-0 d-inline font-weight-bold">
-								<a href="{base}/events/{eventId}/tables/{entry.tableId}" class="text-dark">
+								{#if entry.tableId > 0}
+									<a href="{base}/events/{eventId}/tables/{entry.tableId}" class="text-dark">
+										שולחן {entry.tableNum}
+									</a>
+								{:else}
 									שולחן {entry.tableNum}
-								</a>
+								{/if}
 							</h5>
 							<div class="text-muted small">
 								אורחים צפויים: <strong>{entry.expectedAtTable}</strong>
@@ -111,11 +139,24 @@
 					</li>
 				{/each}
 
-				{#if invitation.tableEntries.length === 0}
+				{#if allEntries.length === 0}
 					<li class="list-group-item text-muted text-center py-3">
 						אין שיבוץ שולחן להזמנה זו
 					</li>
 				{/if}
+
+				<!-- Add Table Row -->
+				<li class="list-group-item">
+					<TableSelector
+						tables={eventState.tables}
+						excludeNums={allEntries.map(e => e.tableNum)}
+						onSelect={(num) => {
+							if (!additionalTableNums.includes(num)) {
+								additionalTableNums = [...additionalTableNums, num];
+							}
+						}}
+					/>
+				</li>
 			</ul>
 
 			<!-- Pending indicator -->

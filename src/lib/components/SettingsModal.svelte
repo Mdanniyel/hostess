@@ -12,7 +12,7 @@
 		{ label: 'Staging 3', value: 'https://staging3.iplan.co.il' },
 		{ label: 'שרת פיתוח ברשת (192.168.10.66)', value: 'http://192.168.10.66:3000' },
 		{ label: 'מנהרה מקומית (iplan.casa)', value: 'https://devl-tunnel-daniel-levi-lvhme3000.iplan.casa' },
-		{ label: 'פיתוח מקומי (lvh.me)', value: 'http://lvh.me:3000' }
+		{ label: 'פיתוח מקומי (lvh.me)', value: 'https://lvh.me:3000' }
 	];
 
 	// Initialize state

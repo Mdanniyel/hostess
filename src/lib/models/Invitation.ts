@@ -94,12 +94,36 @@ export class Invitation {
       }
     }
 
-    return Array.from(grouped.values()).map(entry => ({
+    const entries = Array.from(grouped.values()).map(entry => ({
       ...entry,
       arrivedAtTable: Math.max(0, this.arrivals
         .filter(a => a.table_num === entry.tableNum)
         .reduce((sum, a) => sum + a.guests_count, 0))
     }));
+
+    const coveredTableNums = new Set(entries.map(e => e.tableNum));
+    const arrivalTableNums = Array.from(new Set(this.arrivals.map(a => a.table_num)));
+
+    for (const num of arrivalTableNums) {
+      if (!coveredTableNums.has(num)) {
+        const table = eventState.tables.find(t => t.num === num);
+        const tableId = table?.id ?? 0;
+        const arrivedAtTable = Math.max(0, this.arrivals
+          .filter(a => a.table_num === num)
+          .reduce((sum, a) => sum + a.guests_count, 0));
+
+        if (arrivedAtTable > 0) {
+          entries.push({
+            tableId,
+            tableNum: num,
+            expectedAtTable: 0,
+            arrivedAtTable
+          });
+        }
+      }
+    }
+
+    return entries;
   }
 }
 

@@ -43,6 +43,9 @@ export interface EventRecord {
   start_at: number; // ms
   status: string;
   photo_url: string | null;
+  has_sketch?: boolean;
+  sketch_url?: string | null;
+  sketch_blob?: Blob | null;
   updated_at: number; // ms
 }
 
