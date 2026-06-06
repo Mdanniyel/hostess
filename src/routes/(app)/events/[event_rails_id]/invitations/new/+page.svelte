@@ -10,7 +10,12 @@
 
 	let event = $derived(appState.todayEvents.find(e => e.id === Number(eventId)));
 	let title = $state('');
-	let side = $state('3'); // Default to both (3)
+	let side = $state(3); // Default to both (3)
+	const sideOptions = [
+		{ value: 1, label: 'חתן' },
+		{ value: 2, label: 'כלה' },
+		{ value: 3, label: 'חתן וכלה' }
+	];
 	let addedTables = $state<Array<{ tableNum: number; arrivedCount: number }>>([]);
 
 	function handleTableSelect(num: number) {
@@ -39,7 +44,7 @@
 		await eventState.recordWalkIn(
 			title,
 			null,
-			Number(side),
+			side,
 			addedTables
 		);
 
@@ -52,35 +57,28 @@
 	}
 </script>
 
-<div class="container text-right">
+<div class="container">
 	<div class="card">
 		<!-- Header -->
 		<div class="card-header border-bottom bg-white d-flex align-items-center justify-content-between py-3">
 			<div class="d-flex align-items-center">
-				<button
-					class="btn btn-link p-0 ml-3 text-dark"
-					onclick={goBack}
-					aria-label="חזרה"
-				>
-					<i class="far fa-arrow-right"></i>
-				</button>
-				<h5 class="mb-0 d-inline font-weight-bold">הזמנה חדשה (Walk-In)</h5>
+				<h5 class="mb-0 d-inline font-weight-bold">הזמנה חדשה</h5>
 			</div>
 		</div>
 
 		<!-- Form Body -->
 		<div class="card-body">
 			<!-- Name -->
-			<div class="form-group">
-				<label for="title" class="font-weight-bold">שם האורח / הזמנה עבור</label>
+			<div class="form-group floating-label">
 				<input
 					type="text"
 					id="title"
 					class="form-control"
-					placeholder="הזן שם האורח..."
-					bind:value={title}
+					placeholder="true"
 					autocomplete="off"
+					bind:value={title}
 				/>
+				<label for="title" class="floating-label-default-behaviour">שם הזמנה</label>
 			</div>
 
 
@@ -88,19 +86,17 @@
 			{#if event?.event_type === 'wedding'}
 				<div class="form-group">
 					<label class="font-weight-bold d-block">צד באירוע</label>
-					<div class="d-flex justify-content-start mt-1">
-						<label class="radio-label ml-4">
-							<input type="radio" name="side" value="1" bind:group={side} />
-							<span class="mr-2">חתן</span>
-						</label>
-						<label class="radio-label ml-4">
-							<input type="radio" name="side" value="2" bind:group={side} />
-							<span class="mr-2">כלה</span>
-						</label>
-						<label class="radio-label">
-							<input type="radio" name="side" value="3" bind:group={side} />
-							<span class="mr-2">חתן וכלה</span>
-						</label>
+					<div class="btn-group w-100" role="group">
+						{#each sideOptions as option}
+							<button
+								type="button"
+								class="btn btn-light"
+								class:active={side === option.value}
+								onclick={() => side = option.value}
+							>
+								{option.label}
+							</button>
+						{/each}
 					</div>
 				</div>
 			{/if}
@@ -162,28 +158,16 @@
 		</div>
 
 		<!-- Footer -->
-		<div class="card-footer d-flex justify-content-start bg-white border-top py-3">
+		<div class="card-footer d-flex justify-content-end bg-white border-top py-3">
 			<button
-				class="btn btn-primary"
+				class="btn btn-light"
 				onclick={handleSave}
 				disabled={!title.trim()}
 			>
-				שמור והגעה
-			</button>
-			<button
-				class="btn btn-light border mr-2"
-				onclick={goBack}
-			>
-				ביטול
+				שמירה
 			</button>
 		</div>
 	</div>
 </div>
 
-<style>
-	.radio-label {
-		display: inline-flex;
-		align-items: center;
-		cursor: pointer;
-	}
-</style>
+

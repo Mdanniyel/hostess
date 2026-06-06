@@ -61,7 +61,7 @@
 					</div>
 					<a
 						href="{base}/events/{eventId}/invitations/new"
-						class="btn btn-outline-dark"
+						class="btn btn-light"
 					>
 						<i class="far fa-plus mr-1"></i>הזמנה חדשה
 					</a>
