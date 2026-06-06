@@ -332,8 +332,7 @@ class EventState {
     if (!this.searchQuery.trim()) return this.invitations;
     const q = this.searchQuery.trim().toLowerCase();
     return this.invitations.filter(inv =>
-      inv.title?.toLowerCase().includes(q) ||
-      inv.phone?.includes(q)
+      inv.title?.toLowerCase().includes(q)
     );
   }
 

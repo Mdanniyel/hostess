@@ -12,12 +12,6 @@
 		<div class="card-header d-flex justify-content-between align-items-center">
 			<div class="d-flex align-items-center">
 				<h5 class="card-title mb-0">הזמנות</h5>
-				<a
-					href="{base}/events/{eventId}/invitations/new"
-					class="btn btn-outline-primary btn-sm mr-3"
-				>
-					<i class="far fa-plus mr-1"></i>הזמנה חדשה
-				</a>
 			</div>
 			<div class="small text-muted">
 				הגיעו <strong class="text-dark">{eventState.totalArrived}</strong> / {eventState.totalExpected}
@@ -25,12 +19,13 @@
 		</div>
 
 		<!-- Search -->
-		<div class="px-3 py-2 border-bottom">
+		<div class="px-3 py-2 border-bottom sticky-search">
 			<div class="input-group">
 				<input
 					type="text"
+					name="name"
 					class="form-control"
-					placeholder="חיפוש לפי שם או טלפון..."
+					placeholder="חיפוש לפי שם..."
 					autocomplete="off"
 					autocorrect="off"
 					autocapitalize="off"
@@ -56,11 +51,20 @@
 			{:else if !eventState.searchQuery.trim()}
 				<div class="text-center text-muted py-4">
 					<i class="far fa-search fa-2x mb-2 d-block"></i>
-					הקלידו שם או טלפון כדי לחפש מוזמנים
+					הקלידו שם כדי לחפש מוזמנים
 				</div>
 			{:else if eventState.filteredInvitations.length === 0}
-				<div class="text-center text-muted py-4">
-					לא נמצאו תוצאות עבור "{eventState.searchQuery}"
+				<div class="text-center p-3">
+					<div class="mb-3">
+						<i class="far fa-search-minus fa-2x text-muted mb-2 d-block"></i>
+						<span class="text-muted d-block">לא נמצאו תוצאות עבור "{eventState.searchQuery}"</span>
+					</div>
+					<a
+						href="{base}/events/{eventId}/invitations/new"
+						class="btn btn-outline-dark"
+					>
+						<i class="far fa-plus mr-1"></i>הזמנה חדשה
+					</a>
 				</div>
 			{:else}
 				<div class="list-group list-group-flush">
@@ -97,7 +101,7 @@
 
 		<!-- Footer -->
 		{#if eventState.searchQuery.trim()}
-			<div class="card-footer small text-muted">
+			<div class="card-footer small text-muted sticky-footer">
 				מוצגות {eventState.filteredInvitations.length} מתוך {eventState.invitations.length} הזמנות
 			</div>
 		{/if}
@@ -105,14 +109,27 @@
 </div>
 
 <style>
-	.invitations-list {
-		overflow-y: auto;
-		min-height: auto;
-		max-height: calc(100vh - 250px);
-	}
-
 	input[type="text"]::-webkit-search-cancel-button {
 		-webkit-appearance: none;
 		appearance: none;
+	}
+
+	.sticky-search {
+		background-color: rgba(255, 255, 255, 0.8);
+		-webkit-backdrop-filter: blur(2rem);
+		backdrop-filter: blur(2rem);
+		border-bottom: 1px solid #ced4da !important;
+		position: sticky;
+		top: var(--layout-headers-height, 0px);
+		z-index: 1019;
+	}
+
+	.sticky-footer {
+		background-color: rgba(255, 255, 255, 0.8);
+		-webkit-backdrop-filter: blur(2rem);
+		backdrop-filter: blur(2rem);
+		position: sticky;
+		bottom: 0;
+		z-index: 1018;
 	}
 </style>

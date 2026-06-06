@@ -10,7 +10,6 @@
 
 	let event = $derived(appState.todayEvents.find(e => e.id === Number(eventId)));
 	let title = $state('');
-	let phone = $state('');
 	let side = $state('3'); // Default to both (3)
 	let addedTables = $state<Array<{ tableNum: number; arrivedCount: number }>>([]);
 
@@ -39,7 +38,7 @@
 
 		await eventState.recordWalkIn(
 			title,
-			phone.trim() || null,
+			null,
 			Number(side),
 			addedTables
 		);
@@ -84,19 +83,6 @@
 				/>
 			</div>
 
-			<!-- Phone -->
-			<div class="form-group">
-				<label for="phone" class="font-weight-bold">טלפון (אופציונלי)</label>
-				<input
-					type="tel"
-					id="phone"
-					class="form-control text-left"
-					placeholder="הזן מספר טלפון..."
-					bind:value={phone}
-					dir="ltr"
-					autocomplete="off"
-				/>
-			</div>
 
 			<!-- Side (Marriage-specific) -->
 			{#if event?.event_type === 'wedding'}
