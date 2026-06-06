@@ -114,7 +114,7 @@
 		</div>
 
 		<!-- Search -->
-		<div class="px-3 py-2 border-bottom">
+		<div class="px-3 py-2 border-bottom sticky-search">
 			<div class="input-group">
 				<input
 					type="text"
@@ -237,7 +237,7 @@
 
 		<!-- Footer -->
 		{#if filteredTables.length > 0}
-			<div class="card-footer small text-muted">
+			<div class="card-footer small text-muted sticky-footer">
 				מציג {filteredTables.length} מתוך {eventState.tables.length} שולחנות
 			</div>
 		{/if}
@@ -245,12 +245,6 @@
 </div>
 
 <style>
-	.tables-list {
-		overflow-y: auto;
-		min-height: auto;
-		max-height: calc(100vh - 250px);
-	}
-
 	.dropdown-backdrop {
 		position: fixed;
 		top: 0;

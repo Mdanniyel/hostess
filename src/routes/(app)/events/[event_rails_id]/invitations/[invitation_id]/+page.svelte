@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { page } from '$app/stores';
-	import { goto } from '$app/navigation';
 	import { base } from '$app/paths';
 	import { eventState } from '$lib/state/EventState.svelte';
 	import type { Invitation } from '$lib/models/Invitation';
@@ -23,7 +22,7 @@
 		}
 	});
 
-	let additionalTableNums = $state<number[]>([]);
+		let additionalTableNums = $state<number[]>([]);
 
 	// Combine tableEntries from invitation with local additional tables
 	let allEntries = $derived.by(() => {
@@ -61,12 +60,6 @@
 		if (!invitation) return 0;
 		return entry.arrivedAtTable + eventState.getPendingCount(invitation.id, entry.tableNum);
 	}
-
-	async function goBack() {
-		// Flush pending changes before navigating away
-		await eventState.flushPendingCounts();
-		goto(`${base}/events/${eventId}/invitations`);
-	}
 </script>
 
 {#if !invitation}
@@ -79,13 +72,6 @@
 		<div class="card">
 			<!-- Header -->
 			<div class="card-header">
-				<button
-					class="btn btn-link p-0 mr-2"
-					onclick={goBack}
-					aria-label="חזרה"
-				>
-					<i class="far fa-arrow-right"></i>
-				</button>
 				<h5 class="mb-0 d-inline">{invitation.title}</h5>
 				{#if invitation.badgeText}
 					<span class="badge badge-light border ml-2">{invitation.badgeText}</span>

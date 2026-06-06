@@ -36,7 +36,7 @@
 {#if !showAddSelect}
 	<button
 		type="button"
-		class="btn btn-outline-primary btn-block"
+		class="btn btn-light btn-block"
 		onclick={() => { showAddSelect = true; }}
 	>
 		<i class="far fa-plus mr-1"></i>הוספת שולחן
@@ -55,7 +55,7 @@
 		</select>
 		<div class="input-group-append">
 			<button
-				class="btn btn-primary"
+				class="btn btn-light"
 				type="button"
 				onclick={handleAdd}
 				disabled={selectedTableNum === null}
@@ -63,7 +63,7 @@
 				הוסף
 			</button>
 			<button
-				class="btn btn-light border"
+				class="btn btn-danger"
 				type="button"
 				onclick={handleCancel}
 			>

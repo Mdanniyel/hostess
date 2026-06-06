@@ -51,4 +51,25 @@
 
 <ModalTemplates />
 
+<style>
+	:global(.sticky-search) {
+		background-color: rgba(255, 255, 255, 0.8);
+		-webkit-backdrop-filter: blur(2rem);
+		backdrop-filter: blur(2rem);
+		border-bottom: 1px solid #ced4da !important;
+		position: sticky;
+		top: var(--layout-headers-height, 0px);
+		z-index: 1019;
+	}
+
+	:global(.sticky-footer) {
+		background-color: rgba(255, 255, 255, 0.8);
+		-webkit-backdrop-filter: blur(2rem);
+		backdrop-filter: blur(2rem);
+		position: sticky;
+		bottom: 0;
+		z-index: 1018;
+	}
+</style>
+
 
