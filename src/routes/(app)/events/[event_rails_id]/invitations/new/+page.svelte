@@ -100,11 +100,11 @@
 			{/if}
 
 			<!-- Tables Section -->
-			<div class="form-group border-top pt-3">
-				<label class="font-weight-bold d-block mb-3">הושבה והגעה לשולחנות</label>
+			<div class="border-top pt-3">
+				<h6 class="font-weight-bold mb-3">הושבה והגעה לשולחנות</h6>
 
 				{#if addedTables.length > 0}
-					<ul class="list-group mb-3">
+					<ul class="list-group list-group-flush mb-3">
 						{#each addedTables as item, index}
 							<li class="list-group-item d-flex align-items-center justify-content-between py-3">
 								<div>
