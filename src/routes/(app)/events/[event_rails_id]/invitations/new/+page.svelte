@@ -56,9 +56,7 @@
 		goto(`${base}/events/${eventId}/invitations`);
 	}
 </script>
-
-<div class="container">
-	<div class="card">
+<div class="card">
 		<!-- Header -->
 		<div class="card-header border-bottom bg-white d-flex align-items-center justify-content-between py-3">
 			<div class="d-flex align-items-center">
@@ -168,6 +166,5 @@
 			</button>
 		</div>
 	</div>
-</div>
 
 

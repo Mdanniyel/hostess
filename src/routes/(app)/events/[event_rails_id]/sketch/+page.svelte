@@ -164,9 +164,7 @@
 		}
 	}
 </script>
-
-<div class="container py-3">
-	<div class="card shadow-sm border-0 rounded-3 overflow-hidden">
+<div class="card shadow-sm border-0 rounded-3 overflow-hidden">
 		<!-- Header -->
 		<div class="card-header bg-white border-bottom py-3 d-flex justify-content-between align-items-center">
 			<h5 class="card-title mb-0 font-weight-bold">
@@ -276,7 +274,6 @@
 			{/if}
 		</div>
 	</div>
-</div>
 
 <style>
 	.sketch-container {

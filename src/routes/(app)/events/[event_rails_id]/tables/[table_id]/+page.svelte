@@ -81,13 +81,12 @@
 </script>
 
 {#if !table || !stats}
-	<div class="container text-center text-muted py-5">
+	<div class="text-center text-muted py-5">
 		<div class="spinner-border spinner-border-sm"></div>
 		<div class="mt-2">טוען שולחן...</div>
 	</div>
 {:else}
-	<div class="container">
-		<div class="card">
+	<div class="card">
 			<!-- Header -->
 			<div class="card-header border-bottom bg-white d-flex align-items-center justify-content-between py-3">
 				<div class="d-flex align-items-center">
@@ -182,5 +181,4 @@
 				</div>
 			{/if}
 		</div>
-	</div>
 {/if}

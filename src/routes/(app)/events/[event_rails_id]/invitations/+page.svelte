@@ -6,9 +6,7 @@
 
 	let eventId = $derived($page.params.event_rails_id);
 </script>
-
-<div class="container">
-	<div class="card">
+<div class="card">
 		<div class="card-header d-flex justify-content-between align-items-center">
 			<div class="d-flex align-items-center">
 				<h5 class="card-title mb-0">הזמנות</h5>
@@ -106,7 +104,6 @@
 			</div>
 		{/if}
 	</div>
-</div>
 
 <style>
 	input[type="text"]::-webkit-search-cancel-button {

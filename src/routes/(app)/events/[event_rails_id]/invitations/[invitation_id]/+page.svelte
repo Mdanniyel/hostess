@@ -63,13 +63,12 @@
 </script>
 
 {#if !invitation}
-	<div class="container text-center text-muted py-5">
+	<div class="text-center text-muted py-5">
 		<div class="spinner-border spinner-border-sm"></div>
 		<div class="mt-2">טוען...</div>
 	</div>
 {:else}
-	<div class="container">
-		<div class="card">
+	<div class="card">
 			<!-- Header -->
 			<div class="card-header">
 				<h5 class="mb-0 d-inline">{invitation.title}</h5>
@@ -163,5 +162,4 @@
 				</div>
 			{/if}
 		</div>
-	</div>
 {/if}

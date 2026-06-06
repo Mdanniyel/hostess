@@ -58,5 +58,7 @@
 
 <!-- Main content container wrapper -->
 <main class="adjust-to-sidebar">
-	{@render children()}
+	<div class="container">
+		{@render children()}
+	</div>
 </main>

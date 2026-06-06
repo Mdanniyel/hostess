@@ -51,8 +51,7 @@
 	});
 </script>
 
-<div class="container">
-	<div class="card">
+<div class="card">
 		<!-- Header -->
 		<div class="card-header d-flex justify-content-between align-items-center">
 			<h5 class="card-title mb-0">שולחנות</h5>
@@ -242,7 +241,6 @@
 			</div>
 		{/if}
 	</div>
-</div>
 
 <style>
 	.dropdown-backdrop {

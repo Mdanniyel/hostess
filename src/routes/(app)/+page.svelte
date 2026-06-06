@@ -30,9 +30,9 @@
 		return `${apiBaseUrl}${url}`;
 	}
 </script>
-
-<main class="container adjust-to-sidebar">
-	<div class="d-flex flex-column" style="gap: 1rem;">
+<main class="adjust-to-sidebar">
+	<div class="container">
+		<div class="d-flex flex-column" style="gap: 1rem;">
 		<!-- Today's Events Card -->
 		<div class="card">
 			<h5 class="card-header mb-0">
@@ -128,4 +128,5 @@
 			</div>
 		</div>
 	</div>
+</div>
 </main>
