@@ -36609,9 +36609,6 @@ select.is-valid ~ .select2-container--bootstrap4 .select2-selection, form.was-va
   .fi-us.fis {
     background-image: url(assets/vendor/bs4_iplan_theme/flags/1x1/us-740efcc18998742a7db0e2ba610bddf20475b2aac4b6509da488e04593a2d748.svg); }
 
-.bg-striped {
-  background-image: url(assets/shared/textures/grey_overlay-cbf15e59718755f7404d0ee30707a982e9b62cc8e188374e384b2e657a2d0c5e.png); }
-
 .bg-stripes {
   background-image: url(assets/vendor/bs4_iplan_theme/textures/stripes-cbf15e59718755f7404d0ee30707a982e9b62cc8e188374e384b2e657a2d0c5e.png);
   background-repeat: repeat; }
@@ -42633,17 +42630,17 @@ body.freeze {
     [dir=rtl] .nav.nav-wizard.nav-wizard-steps-1:before {
       right: 50%; }
   .nav.nav-wizard.nav-wizard-steps-1[data-nav-wizard-active-step='2']:before {
-    background-position: -Infinity% center; }
+    background-position: 0% center; }
     [dir=ltr] .nav.nav-wizard.nav-wizard-steps-1[data-nav-wizard-active-step='2']:before {
-      background-position: -Infinity% center; }
+      background-position: 0% center; }
     [dir=rtl] .nav.nav-wizard.nav-wizard-steps-1[data-nav-wizard-active-step='2']:before {
-      background-position: Infinity% center; }
+      background-position: 0% center; }
   .nav.nav-wizard.nav-wizard-steps-1[data-nav-wizard-active-step='1']:before {
-    background-position: NaN% center; }
+    background-position: 0% center; }
     [dir=ltr] .nav.nav-wizard.nav-wizard-steps-1[data-nav-wizard-active-step='1']:before {
-      background-position: NaN% center; }
+      background-position: 0% center; }
     [dir=rtl] .nav.nav-wizard.nav-wizard-steps-1[data-nav-wizard-active-step='1']:before {
-      background-position: NaN% center; }
+      background-position: 0% center; }
   .nav.nav-wizard.nav-wizard-steps-1 .nav-item {
     width: 100%; }
 
@@ -43352,7 +43349,7 @@ body {
   background-color: #d8e4eb; }
   @media (min-width: 768px) {
     body {
-      background: url('data:image/svg+xml,<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 227"><path fill="%23d8e4eb" d="M0,35c89.92,12.16,320,32,480,26.7,160-5.7,320-47.7,480-58.7s320,11,400,21.3l80,10.7v192H0"/></svg>') 0 100% repeat-x, url(assets/shared/textures/grey_overlay-cbf15e59718755f7404d0ee30707a982e9b62cc8e188374e384b2e657a2d0c5e.png), #4b688d;
+      background: url('data:image/svg+xml,<svg id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 227"><path fill="%23d8e4eb" d="M0,35c89.92,12.16,320,32,480,26.7,160-5.7,320-47.7,480-58.7s320,11,400,21.3l80,10.7v192H0"/></svg>') 0 100% repeat-x, #4b688d;
       background-size: auto 65%, auto; } }
 
 main {

@@ -9,7 +9,7 @@
  */
 
 import { liveQuery } from 'dexie';
-import { db, type GroupRecord, type TableRecord, type TableSeatingRecord, type ActualArrivalRecord } from '../db';
+import { db, type GroupRecord, type TableRecord, type TableSeatingRecord, type ActualArrivalRecord, type EventRecord } from '../db';
 import '../models/Invitation'; // registers mapToClass
 import { Invitation } from '../models/Invitation';
 import { getSyncEngine } from '../sync/syncEngineInstance';
@@ -21,6 +21,7 @@ class EventState {
   tables = $state<TableRecord[]>([]);
   tableSeatings = $state<TableSeatingRecord[]>([]);
   arrivals = $state<ActualArrivalRecord[]>([]);
+  activeEvent = $state<EventRecord | null>(null);
 
   // --- UI state ---
   searchQuery = $state('');
@@ -31,6 +32,32 @@ class EventState {
   filteredInvitations = $derived.by(() => this.computeFilteredInvitations());
   totalExpected = $derived(this.invitations.reduce((sum, inv) => sum + inv.expected_guests_count, 0));
   totalArrived = $derived(this.arrivals.reduce((sum, a) => sum + a.guests_count, 0));
+  activeEventTitle = $derived(this.activeEvent?.sp_event_title ?? '');
+  activeEventType = $derived(this.activeEvent?.event_type ?? '');
+
+  activeEventDateFormatted = $derived.by(() => {
+    if (!this.activeEvent?.start_at) return '';
+    const date = new Date(this.activeEvent.start_at);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = String(date.getFullYear()).slice(-2);
+    return `${day}/${month}/${year}`;
+  });
+
+  activeEventTimeFormatted = $derived.by(() => {
+    if (!this.activeEvent?.start_at) return '';
+    const date = new Date(this.activeEvent.start_at);
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    return `${hours}:${minutes}`;
+  });
+
+  activeEventDayOfWeek = $derived.by(() => {
+    if (!this.activeEvent?.start_at) return '';
+    const date = new Date(this.activeEvent.start_at);
+    const daysOfWeek = ['יום א', 'יום ב', 'יום ג', 'יום ד', 'יום ה', 'יום ו', 'שבת'];
+    return daysOfWeek[date.getDay()];
+  });
 
   // --- Private ---
   private subscriptions: Array<{ unsubscribe(): void }> = [];
@@ -46,6 +73,10 @@ class EventState {
     this.isLoading = true;
 
     // Set up liveQueries — they auto-update $state when IndexedDB changes
+    this.subscriptions.push(
+      liveQuery(() => db.events.get(eventId))
+        .subscribe({ next: (data) => { this.activeEvent = data ?? null; } })
+    );
     this.subscriptions.push(
       liveQuery(() => db.invitations.where('event_id').equals(eventId).toArray())
         .subscribe({ next: (data) => { this.invitations = data as unknown as Invitation[]; } })
@@ -87,6 +118,7 @@ class EventState {
     this.searchQuery = '';
     this.pendingCounts = {};
     this.activeEventId = null;
+    this.activeEvent = null;
   }
 
   // --- Helpers for UI ---

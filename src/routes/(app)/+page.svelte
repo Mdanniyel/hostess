@@ -31,7 +31,7 @@
 	}
 </script>
 
-<div class="container adjust-to-sidebar">
+<main class="container adjust-to-sidebar">
 	<div class="d-flex flex-column" style="gap: 1rem;">
 		<!-- Today's Events Card -->
 		<div class="card">
@@ -128,4 +128,4 @@
 			</div>
 		</div>
 	</div>
-</div>
+</main>

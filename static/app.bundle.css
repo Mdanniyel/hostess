@@ -5,7 +5,7 @@
  * Copyright 2011-2019 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
  */
-@import url("https://fonts.googleapis.com/css?family=Rubik:200,300,400,500&display=swap&subset=hebrew");
+@import url("https://fonts.googleapis.com/css?family=Rubik:200,300,400,500,700,900&display=swap&subset=hebrew");
 [dir=ltr] {
   text-align: left; }
 
@@ -36609,9 +36609,6 @@ select.is-valid ~ .select2-container--bootstrap4 .select2-selection, form.was-va
   .fi-us.fis {
     background-image: url(assets/vendor/bs4_iplan_theme/flags/1x1/us-740efcc18998742a7db0e2ba610bddf20475b2aac4b6509da488e04593a2d748.svg); }
 
-.bg-striped {
-  background-image: url(assets/shared/textures/grey_overlay-cbf15e59718755f7404d0ee30707a982e9b62cc8e188374e384b2e657a2d0c5e.png); }
-
 .bg-stripes {
   background-image: url(assets/vendor/bs4_iplan_theme/textures/stripes-cbf15e59718755f7404d0ee30707a982e9b62cc8e188374e384b2e657a2d0c5e.png);
   background-repeat: repeat; }
@@ -42633,17 +42630,17 @@ body.freeze {
     [dir=rtl] .nav.nav-wizard.nav-wizard-steps-1:before {
       right: 50%; }
   .nav.nav-wizard.nav-wizard-steps-1[data-nav-wizard-active-step='2']:before {
-    background-position: -Infinity% center; }
+    background-position: 0% center; }
     [dir=ltr] .nav.nav-wizard.nav-wizard-steps-1[data-nav-wizard-active-step='2']:before {
-      background-position: -Infinity% center; }
+      background-position: 0% center; }
     [dir=rtl] .nav.nav-wizard.nav-wizard-steps-1[data-nav-wizard-active-step='2']:before {
-      background-position: Infinity% center; }
+      background-position: 0% center; }
   .nav.nav-wizard.nav-wizard-steps-1[data-nav-wizard-active-step='1']:before {
-    background-position: NaN% center; }
+    background-position: 0% center; }
     [dir=ltr] .nav.nav-wizard.nav-wizard-steps-1[data-nav-wizard-active-step='1']:before {
-      background-position: NaN% center; }
+      background-position: 0% center; }
     [dir=rtl] .nav.nav-wizard.nav-wizard-steps-1[data-nav-wizard-active-step='1']:before {
-      background-position: NaN% center; }
+      background-position: 0% center; }
   .nav.nav-wizard.nav-wizard-steps-1 .nav-item {
     width: 100%; }
 
@@ -43594,8 +43591,6 @@ body {
         transition: none; } }
   body footer {
     border-top: 1px solid #ced4da; }
-@charset "UTF-8";
-@import url("https://fonts.googleapis.com/css?family=Rubik:300,400,500,700,900&display=swap&subset=hebrew");
 @font-face {
   font-family: "iplan";
   src: url(assets/iplan-fonts/iplan-97eba15d26dbc15de5d8ad410d55445bd0d61ca8ccdbdbfbc418a9f57cc59026.eot?14500627);
