@@ -5,8 +5,8 @@
 	import { longpress } from '$lib/actions/longpress';
 	import { settingsService } from '$lib/services/settingsService.svelte';
 
-	let username = $state('');
-	let password = $state('');
+	let username = $state('h1@demo.com');
+	let password = $state('123456');
 	let showPassword = $state(false);
 	let isLoading = $state(false);
 	let errorMessage = $state('');

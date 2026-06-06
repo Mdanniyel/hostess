@@ -2,87 +2,46 @@
 /// <reference lib="webworker" />
 
 import { build, files, version } from '$service-worker';
+import { precacheAndRoute, createHandlerBoundToURL } from 'workbox-precaching';
+import { registerRoute, NavigationRoute } from 'workbox-routing';
+import { clientsClaim } from 'workbox-core';
 
 declare const self: ServiceWorkerGlobalScope;
 
-const CACHE = `cache-${version}`;
+// Take control of open tabs immediately and activate the service worker
+self.addEventListener('install', () => self.skipWaiting());
+clientsClaim();
 
-// Derive the SPA base from the SW's own URL so this works at any path.
-// e.g. SW at /he-IL/corp/hostess-app/service-worker.js → base = '/he-IL/corp/hostess-app/'
+// Derive the base path of the app
 const SPA_BASE = new URL('./', self.location.href).pathname;
 
-// Pre-cache all JS/CSS build chunks + static files.
-// Note: 200.html (the SPA fallback) is NOT included in `build` or `files` by adapter-static.
-// We add it explicitly so it is always available offline.
-const ASSETS = [
-  ...build,
-  ...files.filter((f) => !f.endsWith('.gz')),
+// Build the precache manifest
+// We include:
+// 1. SvelteKit compiled JS/CSS build chunks (already hashed, so revision is null)
+// 2. Files in the static directory (without hashes, so we use version as revision)
+// 3. The fallback shell page '404.html' (used for offline navigation)
+const precacheManifest = [
+  ...build.map((url) => ({ url, revision: null })),
+  ...files
+    .filter((f) => !f.endsWith('.gz'))
+    .map((url) => ({ url, revision: version })),
+  { url: `${SPA_BASE}404.html`, revision: version }
 ];
 
-self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches
-      .open(CACHE)
-      .then((cache) => cache.addAll(ASSETS))
-      .then(() => self.skipWaiting()) // Activate immediately, don't wait for old tabs to close
-  );
+// Precache all assets - Workbox serves these Cache-First automatically
+precacheAndRoute(precacheManifest);
+
+// Handle navigation requests (page refreshes / URL changes)
+// This intercepts page requests like http://localhost:5173/he-IL/corp/hostess-app/events/251580/invitations/63052586
+// and serves the cached '404.html' fallback page so SvelteKit's client-side routing works offline.
+const handler = createHandlerBoundToURL(`${SPA_BASE}404.html`);
+const navigationRoute = new NavigationRoute(handler, {
+  // Only intercept navigation requests under the app's base path
+  allowlist: [new RegExp(`^${SPA_BASE}`)],
+  // Ignore request paths with extensions (like .js, .css, etc.) or API endpoints
+  denylist: [
+    new RegExp(`\\.[a-zA-Z0-9]+$`),
+    new RegExp(`${SPA_BASE}api/`)
+  ]
 });
-
-self.addEventListener('activate', (event) => {
-  event.waitUntil(
-    caches
-      .keys()
-      .then((keys) => Promise.all(keys.filter((k) => k !== CACHE).map((k) => caches.delete(k))))
-      .then(() => self.clients.claim()) // Take control of all open tabs immediately
-  );
-});
-
-self.addEventListener('fetch', (event) => {
-  if (event.request.method !== 'GET') return;
-
-  const url = new URL(event.request.url);
-
-  // Only intercept same-origin requests within the SPA's path scope.
-  // This prevents the SW from accidentally caching Rails API calls or cross-origin assets.
-  if (url.origin !== self.location.origin) return;
-  if (!url.pathname.startsWith(SPA_BASE)) return;
-
-  event.respondWith(
-    (async () => {
-      const cache = await caches.open(CACHE);
-
-      // Navigation requests (page loads / browser back-forward) → serve SPA shell
-      if (event.request.mode === 'navigate') {
-        const cached = await cache.match(event.request);
-        if (cached) return cached;
-
-        // Fallback: return the 200.html SPA shell so client-side routing works offline.
-        // We try two locations: the exact match first, then the explicit fallback file.
-        const shell =
-          (await cache.match(`${self.location.origin}${SPA_BASE}200.html`)) ??
-          (await cache.match(event.request));
-
-        if (shell) return shell;
-
-        // Last resort: fetch from network (first visit, online)
-        return fetch(event.request);
-      }
-
-      // All other requests (JS, CSS, images, fonts) → cache-first
-      const cached = await cache.match(event.request);
-      if (cached) return cached;
-
-      // Not in cache → fetch from network and cache successful responses
-      try {
-        const response = await fetch(event.request);
-        if (response.status === 200) {
-          await cache.put(event.request, response.clone());
-        }
-        return response;
-      } catch {
-        // Offline and asset not in cache — nothing we can do
-        return new Response('Offline', { status: 503, statusText: 'Service Unavailable' });
-      }
-    })()
-  );
-});
+registerRoute(navigationRoute);
