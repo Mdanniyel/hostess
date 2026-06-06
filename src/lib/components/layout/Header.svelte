@@ -29,11 +29,11 @@
 		</button>
 		<div class="navbar-nav ml-auto">
 			<img
-				class="rounded-circle bg-white navbar-image"
-				src="https://iplan-uuc-production.s3.amazonaws.com/public/corp/companies/4/logo_thumb.jpg?1450771519"
+				class="navbar-image"
+				src="{base}/iplan-logo.svg"
 				alt="iPlan Logo"
 				use:longpress={() => settingsService.open()}
-				style="cursor: pointer;"
+				style="cursor: pointer; filter: invert(1);"
 			/>
 		</div>
 	</nav>
